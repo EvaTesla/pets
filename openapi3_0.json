@@ -1,0 +1,223 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ветеринарная клиника OpenAPI спецификация",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api/v1",
+      "description": "Dev server"
+    }
+  ],
+  "paths": {
+    "/pets": {
+      "get": {
+        "summary": "Метод получения списка питомцев",
+        "tags": [
+          "Pets"
+        ],
+        "operationId": "getALLPets",
+        "parameters": [
+          {
+            "name": "pet_id",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор питомца",
+            "schema": {
+              "type": "string"
+            },
+            "example": 1234
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ со списком питомцев",
+            "content": null,
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pets"
+              }
+            }
+          },
+          "default": {
+            "description": "Все нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Метод создания питомца",
+        "tags": [
+          "Pets"
+        ],
+        "operationID": "createPet",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный ответ со списком питомцев",
+            "content": null,
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet"
+              }
+            }
+          },
+          "default": {
+            "description": "Все нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "sumary": "Метод удаления питомца по сигнификатору",
+        "tags": [
+          "Pets"
+        ],
+        "operationID": "deletePetId",
+        "parameters": [
+          {
+            "name": "pet_id",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор питомца",
+            "schema": {
+              "type": "string",
+              "example": 1234
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление",
+            "content": null,
+            "application/json": {}
+          },
+          "default": {
+            "description": "Все нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/owner/{pet_id}": {
+      "get": {
+        "summary": "Метод получения списка питомцев для хозяина",
+        "tags": [
+          "Owner"
+        ],
+        "operationId": "getALLPetsforowner",
+        "parameters": [
+          {
+            "name": "pet_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный ответ со списком питомцев",
+            "content": null,
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Pet"
+              }
+            }
+          },
+          "default": {
+            "description": "Все нестандартное",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Pet": {
+        "type": "object",
+        "required": [
+          "name",
+          "owner",
+          "category"
+        ],
+        "properties": {
+          "pet_id": {
+            "type": "integer",
+            "example": 12
+          },
+          "name": {
+            "type": "string",
+            "example": "Jessy"
+          },
+          "owner": {
+            "type": "string",
+            "example": "Anya Ivanova"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "cats",
+              "dogs",
+              "birds",
+              "rodents"
+            ],
+            "description": "Тип животного"
+          }
+        }
+      },
+      "Pets": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Pet"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
